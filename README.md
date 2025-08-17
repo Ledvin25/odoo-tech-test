@@ -3,6 +3,8 @@
 Este módulo permite calcular automáticamente la **cantidad de venta** (`product_uom_qty`) a partir de **Largo × Ancho × Alto** en las líneas de pedido de ventas en Odoo 18.  
 Además, añade estos campos en la vista y en el **reporte PDF** de cotización/pedido.
 
+> **📂 Nota:** Las capturas de pantalla y PDFs solicitadas están incluidos en la raíz de este repositorio.
+
 ---
 
 ## 📦 Información General
@@ -61,21 +63,14 @@ Si tienes Docker Compose, simplemente ejecuta:
 ```bash
 docker compose up --build -d
 ```
-Esto montará automáticamente el entorno completo con Odoo 18 + PostgreSQL y el módulo `sale_dimension_qty` ya disponible.
+Esto montará automáticamente el entorno completo con Odoo 18 + PostgreSQL y el módulo `sale_dimension_qty` ya disponible para activar.
 
 ### Opción 2: Instalación manual
-1. **Copiar el módulo** a tu carpeta de addons:
-   ```bash
-   # Copiar desde este repositorio
-   cp -r addons/sale_dimension_qty /tu/ruta/de/addons/
-   ```
-2. **Actualizar el módulo** en Odoo:
-   ```bash
-   odoo -c /etc/odoo/odoo.conf -d <DB> -u sale_dimension_qty --stop-after-init
-   ```
-3. **O instalar desde la interfaz web**:
-   - Ir a Apps → Update Apps List 
-   - Buscar **Sale Dimension Quantity**
+1. **Usar el ZIP incluido** en este repositorio (ya viene listo)
+2. **Pegar el ZIP** directamente en tu carpeta de addons de Odoo
+3. **O cargar desde la interfaz web**:
+   - Ir a Apps → Upload
+   - Seleccionar el archivo ZIP incluido en el repo
    - Hacer clic en Install
 
 ### Verificación
@@ -99,6 +94,7 @@ Las pruebas se corren en **HTTP con puerto alternativo** y sin workers:
 ```bash
 odoo -c /etc/odoo/odoo.conf -d <DB>   -u sale_dimension_qty   --test-enable   --test-tags="post_install,-at_install"   --workers=0 --stop-after-init   --http-port=8070
 ```
+> **Nota:** La base de datos creada por defecto en el entorno Docker Compose se llama `odoo`.
 
 Pruebas incluidas:
 - Verificar que **Cantidad = Largo × Ancho × Alto**.
