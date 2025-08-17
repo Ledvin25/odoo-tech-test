@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <record id="view_order_form_inherit_dimensions" model="ir.ui.view">
+      <field name="name">sale.order.form.dimensions</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+
+        <!-- ========== LIST embebido (tabla de líneas) ========== -->
+
+        <!-- 1) Dejar Cantidad (product_uom_qty) en solo lectura -->
+        <xpath expr="//field[@name='order_line']/list//field[@name='product_uom_qty']"
+               position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <!-- 2) Añadir Largo/Ancho/Alto justo DESPUÉS de Cantidad -->
+        <xpath expr="//field[@name='order_line']/list//field[@name='product_uom_qty']"
+               position="after">
+          <field name="x_length" optional="show"/>
+          <field name="x_width"  optional="show"/>
+          <field name="x_height" optional="show"/>
+        </xpath>
+
+        <!-- ========== FORM embebido (popup de línea) ========== -->
+
+        <!-- 3) Dejar Cantidad en solo lectura -->
+        <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']"
+               position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <!-- 4) Insertar grupo Dimensiones DESPUÉS del bloque de cantidad -->
+        <xpath expr="//field[@name='order_line']/form//div[@name='ordered_qty']"
+               position="after">
+          <group string="Dimensiones">
+            <field name="x_length"/>
+            <field name="x_width"/>
+            <field name="x_height"/>
+            <!-- opcional para depurar -->
+            <field name="x_dimension_qty" attrs="{'readonly': 1}"/>
+          </group>
+        </xpath>
+
+      </field>
+    </record>
+
+  </data>
+</odoo>

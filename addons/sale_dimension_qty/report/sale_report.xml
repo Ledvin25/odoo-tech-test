@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Reemplazar Quantity por Largo/Ancho/Alto en encabezado y cuerpo -->
+  <template id="report_saleorder_document_inherit_dimensions"
+            inherit_id="sale_management.report_saleorder_document_inherit_sale_management"
+            priority="10000">
+    <!-- Encabezado -->
+    <xpath expr="//thead/tr/th[@name='th_quantity']" position="replace">
+      <th name="th_length" class="text-end text-nowrap">Largo</th>
+      <th name="th_width"  class="text-end text-nowrap">Ancho</th>
+      <th name="th_height" class="text-end text-nowrap">Alto</th>
+    </xpath>
+
+    <!-- Cuerpo: la celda de Quantity por 3 celdas -->
+    <xpath expr="//tbody//td[@name='td_quantity']" position="replace">
+      <td name="td_length" class="text-end">
+        <span t-field="line.x_length"/>
+      </td>
+      <td name="td_width" class="text-end">
+        <span t-field="line.x_width"/>
+      </td>
+      <td name="td_height" class="text-end">
+        <span t-field="line.x_height"/>
+      </td>
+    </xpath>
+  </template>
+
+</odoo>

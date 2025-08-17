@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  odoo:
+    image: odoo:18.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: ${POSTGRES_USER}
+      PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      ODOO_ADMIN_PASS: ${ODOO_ADMIN_PASS}
+    volumes:
+      - ./entrypoint.sh:/usr/local/bin/custom-entrypoint.sh:ro
+      - ./odoo.conf.template:/etc/odoo/odoo.conf.template:ro
+      - ./addons:/mnt/extra-addons
+      - ./odoo-data:/var/lib/odoo
+    entrypoint: ["bash", "/usr/local/bin/custom-entrypoint.sh"]
+    command: ["odoo", "-i", "base", "-d", "${POSTGRES_DB}"]
